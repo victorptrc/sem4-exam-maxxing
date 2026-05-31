@@ -1,10 +1,18 @@
 # Exam Maxxing
 
-An interactive, extensible exam-prep app — first subject: the SDU **Component-Based
-Systems** course. One
-visual lesson per week + a 312-question practice quiz (15 official mock-exam
-questions plus 20–26 per week). Built with Vite + React + TypeScript + Tailwind +
-shadcn-style components. Fully client-side — no backend.
+An interactive, extensible, multi-subject exam-prep app. Built with Vite + React +
+TypeScript + Tailwind + shadcn-style components. Fully client-side — no backend.
+
+Subjects:
+
+- **Component-Based Systems** (SDU) — one visual lesson per week + a 312-question
+  practice quiz (15 official mock-exam questions plus 20–26 per week).
+- **AI Fundamentals** — quiz-only: a ~515-question bank across 12 lectures
+  (intelligent agents, search, CSPs, Bayesian networks, HMMs, machine learning),
+  plus a sample-exam set.
+
+The home screen lists subjects; each subject has its own dashboard, lessons (where
+available), and practice/full/mock quiz modes.
 
 ## Run it
 
@@ -25,10 +33,11 @@ It uses a hash router, so the built `dist/` also works when opened directly.
 
 ## How to study
 
-1. Open the **Dashboard** → pick a week → read the lesson (expand the accordions,
-   flip the flashcards, do the in-lesson quick check).
-2. Use **Practice by week** to drill one topic, **Full exam** for an all-weeks
-   shuffle, and **Mock exam** for the 15 official questions.
+1. From the **Home** screen pick a subject. For subjects with lessons, open a week
+   → read the lesson (expand the accordions, flip the flashcards, do the in-lesson
+   quick check).
+2. Use **Practice by week/lecture** to drill one topic, **Full exam** for an
+   all-weeks shuffle, and **Mock/Sample exam** for the official question set.
 3. Best scores are saved in your browser (localStorage). Aim for 80%+ on the
    mock + full exam.
 
@@ -61,6 +70,11 @@ The engine (components, quiz, routing, dashboard) is reused unchanged. A lesson 
 just a component that composes `LessonSection`, `Callout`, `Diagram`,
 `FlashcardDeck`, `Accordion`, and `MiniQuiz`; a question is
 `{ week, topic, question, options[4], answer, explanation }`.
+
+**Quiz-only subjects** (like AI Fundamentals) just omit the lesson `component` on
+each `WeekMeta` — the dashboard hides the lessons grid and the unit cards link
+straight to practice. A subject can also customize `unitLabel` ("Lecture" vs
+"Week"), `mockLabel` ("Sample exam" vs "Mock exam"), `examDate`, and `studyPlan`.
 
 > Course materials live in `_materials/` (extracted lecture PDFs) — used only to
 > author the content; not bundled into the app.

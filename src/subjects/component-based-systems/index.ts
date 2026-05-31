@@ -76,4 +76,18 @@ export const componentBasedSystems: Subject = {
   description: SUBJECT_DESCRIPTION,
   weeks,
   questions,
+  unitLabel: "Week",
+  mockLabel: "Mock exam",
+  examDate: "9 June 2026",
+  studyPlan: [
+    { day: "Day 1", task: "Weeks 6 & 7 — CBSE foundations + Java/Maven. Get the vocabulary solid." },
+    { day: "Day 2", task: "Weeks 8 & 9 — component design/architecture + the Java Module System." },
+    { day: "Day 3", task: "Week 10 — Dependency Injection (high-yield: appears on the mock exam)." },
+    { day: "Day 4", task: "Weeks 11 & 12 — Spring & AOP (aspects, join points, pointcuts, advice)." },
+    { day: "Day 5", task: "Week 13 — architecture patterns. Review + re-quiz weeks 6–10." },
+    { day: "Day 6", task: "Weeks 16 & 17 — SOA, web services, gRPC, microservices patterns." },
+    { day: "Day 7", task: "Weeks 18 & 19 — component testing, test types, load vs stress." },
+    { day: "Day 8", task: "Full exam mode twice. Review every miss; revisit weak lessons." },
+    { day: "Day 9", task: "Mock exam + flashcard sprint on exam traps. Light review, then rest." },
+  ],
 };

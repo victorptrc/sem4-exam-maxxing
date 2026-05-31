@@ -18,7 +18,10 @@ export function LessonLayout({ subjectId, meta, prev, next, children }: LessonLa
   return (
     <div className="mx-auto max-w-3xl px-4 py-8">
       <div className="mb-6 flex items-center gap-2 text-sm text-muted-foreground">
-        <Link to="/" className="inline-flex items-center gap-1 hover:text-foreground">
+        <Link
+          to={`/subject/${subjectId}`}
+          className="inline-flex items-center gap-1 hover:text-foreground"
+        >
           <ArrowLeft className="h-4 w-4" /> Dashboard
         </Link>
         <span>/</span>

@@ -15,6 +15,10 @@ interface QuizAppProps {
   questions: Question[];
   /** Shuffle question order (off for the fixed mock exam). */
   shuffleQuestions?: boolean;
+  /** Label for the unit of organization, e.g. "Week" or "Lecture". */
+  unitLabel?: string;
+  /** Label for the week-0 set, e.g. "Mock exam" or "Sample exam". */
+  mockLabel?: string;
 }
 
 function prepare(questions: Question[], shuffleQuestions: boolean): PreparedQuestion[] {
@@ -33,7 +37,14 @@ function prepare(questions: Question[], shuffleQuestions: boolean): PreparedQues
   });
 }
 
-export function QuizApp({ subjectId, modeKey, questions, shuffleQuestions = true }: QuizAppProps) {
+export function QuizApp({
+  subjectId,
+  modeKey,
+  questions,
+  shuffleQuestions = true,
+  unitLabel,
+  mockLabel,
+}: QuizAppProps) {
   const [seed, setSeed] = React.useState(0);
   const prepared = React.useMemo(
     () => prepare(questions, shuffleQuestions),
@@ -77,6 +88,9 @@ export function QuizApp({ subjectId, modeKey, questions, shuffleQuestions = true
         answers={answers}
         best={best}
         onRetry={() => setSeed((s) => s + 1)}
+        unitLabel={unitLabel}
+        mockLabel={mockLabel}
+        subjectId={subjectId}
       />
     );
   }
@@ -117,7 +131,14 @@ export function QuizApp({ subjectId, modeKey, questions, shuffleQuestions = true
         <Progress value={((idx + (isRevealed ? 1 : 0)) / total) * 100} />
       </div>
 
-      <QuestionCard q={q} selected={answers[idx]} revealed={isRevealed} onSelect={select} />
+      <QuestionCard
+        q={q}
+        selected={answers[idx]}
+        revealed={isRevealed}
+        onSelect={select}
+        unitLabel={unitLabel}
+        mockLabel={mockLabel}
+      />
 
       <div className="flex items-center justify-between gap-3">
         <Button

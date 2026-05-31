@@ -16,10 +16,19 @@ export function QuizPage() {
   const [searchParams] = useSearchParams();
   const subject = getSubject(subjectId);
 
+  const mockQuestions = subject ? questionsForWeek(subject.questions, 0) : [];
+  const hasMock = mockQuestions.length > 0;
+
   const initialWeek = searchParams.get("week");
   const initialMode = searchParams.get("mode");
   const [tab, setTab] = React.useState(
-    initialWeek ? "practice" : initialMode === "mock" ? "mock" : initialMode === "full" ? "full" : "practice"
+    initialWeek
+      ? "practice"
+      : initialMode === "mock" && hasMock
+      ? "mock"
+      : initialMode === "full"
+      ? "full"
+      : "practice"
   );
   const [selectedWeek, setSelectedWeek] = React.useState<number | null>(
     initialWeek ? Number(initialWeek) : null
@@ -27,14 +36,19 @@ export function QuizPage() {
 
   if (!subject) return <NotFound />;
 
+  const unitLabel = subject.unitLabel ?? "Week";
+  const mockLabel = subject.mockLabel ?? "Mock exam";
   const weeks = weeksInBank(subject.questions);
-  const mockQuestions = questionsForWeek(subject.questions, 0);
+  const titles = Object.fromEntries(subject.weeks.map((w) => [w.week, w.title]));
 
   return (
     <div className="mx-auto max-w-3xl px-4 py-8">
       <div className="mb-6 flex items-center gap-2 text-sm text-muted-foreground">
-        <Link to="/" className="inline-flex items-center gap-1 hover:text-foreground">
-          <ArrowLeft className="h-4 w-4" /> Dashboard
+        <Link
+          to={`/subject/${subjectId}`}
+          className="inline-flex items-center gap-1 hover:text-foreground"
+        >
+          <ArrowLeft className="h-4 w-4" /> {subject.title}
         </Link>
         <span>/</span>
         <span>Quiz</span>
@@ -44,42 +58,46 @@ export function QuizPage() {
       <p className="mb-6 text-muted-foreground">{subject.title}</p>
 
       <Tabs value={tab} onValueChange={setTab}>
-        <TabsList className="grid w-full grid-cols-3">
+        <TabsList className={`grid w-full ${hasMock ? "grid-cols-3" : "grid-cols-2"}`}>
           <TabsTrigger value="practice">
-            <Layers className="mr-1.5 h-4 w-4" /> By week
+            <Layers className="mr-1.5 h-4 w-4" /> By {unitLabel.toLowerCase()}
           </TabsTrigger>
           <TabsTrigger value="full">
             <Shuffle className="mr-1.5 h-4 w-4" /> Full exam
           </TabsTrigger>
-          <TabsTrigger value="mock">
-            <ClipboardList className="mr-1.5 h-4 w-4" /> Mock exam
-          </TabsTrigger>
+          {hasMock && (
+            <TabsTrigger value="mock">
+              <ClipboardList className="mr-1.5 h-4 w-4" /> {mockLabel}
+            </TabsTrigger>
+          )}
         </TabsList>
 
-        {/* Practice by week */}
+        {/* Practice by week/lecture */}
         <TabsContent value="practice">
           {selectedWeek === null ? (
             <WeekPicker
               subjectId={subjectId}
               weeks={weeks}
               counts={subject.questions}
-              titles={Object.fromEntries(subject.weeks.map((w) => [w.week, w.title]))}
+              titles={titles}
+              unitLabel={unitLabel}
               onPick={setSelectedWeek}
             />
           ) : (
             <div>
               <Button variant="ghost" className="mb-3" onClick={() => setSelectedWeek(null)}>
-                <ArrowLeft className="h-4 w-4" /> All weeks
+                <ArrowLeft className="h-4 w-4" /> All {unitLabel.toLowerCase()}s
               </Button>
               <h2 className="mb-4 text-lg font-semibold">
-                Week {selectedWeek}:{" "}
-                {subject.weeks.find((w) => w.week === selectedWeek)?.title}
+                {unitLabel} {selectedWeek}: {titles[selectedWeek]}
               </h2>
               <QuizApp
                 key={`week-${selectedWeek}`}
                 subjectId={subjectId}
                 modeKey={`practice-week-${selectedWeek}`}
                 questions={questionsForWeek(subject.questions, selectedWeek)}
+                unitLabel={unitLabel}
+                mockLabel={mockLabel}
               />
             </div>
           )}
@@ -88,30 +106,36 @@ export function QuizPage() {
         {/* Full exam */}
         <TabsContent value="full">
           <p className="mb-4 text-sm text-muted-foreground">
-            All {subject.questions.filter((q) => q.week > 0).length} practice questions from every
-            week, shuffled — closest to the real exam experience.
+            All {subject.questions.filter((q) => q.week > 0).length} practice questions from every{" "}
+            {unitLabel.toLowerCase()}, shuffled — closest to the real exam experience.
           </p>
           <QuizApp
             key="full"
             subjectId={subjectId}
             modeKey="full"
             questions={subject.questions.filter((q) => q.week > 0)}
+            unitLabel={unitLabel}
+            mockLabel={mockLabel}
           />
         </TabsContent>
 
-        {/* Mock exam */}
-        <TabsContent value="mock">
-          <p className="mb-4 text-sm text-muted-foreground">
-            The official {mockQuestions.length}-question mock exam, in order.
-          </p>
-          <QuizApp
-            key="mock"
-            subjectId={subjectId}
-            modeKey="mock"
-            questions={mockQuestions}
-            shuffleQuestions={false}
-          />
-        </TabsContent>
+        {/* Mock / sample exam */}
+        {hasMock && (
+          <TabsContent value="mock">
+            <p className="mb-4 text-sm text-muted-foreground">
+              The {mockQuestions.length}-question {mockLabel.toLowerCase()}, in order.
+            </p>
+            <QuizApp
+              key="mock"
+              subjectId={subjectId}
+              modeKey="mock"
+              questions={mockQuestions}
+              shuffleQuestions={false}
+              unitLabel={unitLabel}
+              mockLabel={mockLabel}
+            />
+          </TabsContent>
+        )}
       </Tabs>
     </div>
   );
@@ -122,12 +146,14 @@ function WeekPicker({
   weeks,
   counts,
   titles,
+  unitLabel,
   onPick,
 }: {
   subjectId: string;
   weeks: number[];
   counts: { week: number }[];
   titles: Record<number, string>;
+  unitLabel: string;
   onPick: (w: number) => void;
 }) {
   return (
@@ -140,7 +166,9 @@ function WeekPicker({
             <Card className="transition-colors hover:border-primary">
               <CardContent className="flex items-center justify-between p-4">
                 <div>
-                  <p className="font-semibold">Week {w}</p>
+                  <p className="font-semibold">
+                    {unitLabel} {w}
+                  </p>
                   <p className="line-clamp-1 text-sm text-muted-foreground">{titles[w]}</p>
                 </div>
                 <div className="flex flex-col items-end gap-1">

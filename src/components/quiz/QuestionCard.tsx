@@ -17,16 +17,25 @@ interface QuestionCardProps {
   selected: number | null;
   revealed: boolean;
   onSelect: (i: number) => void;
+  unitLabel?: string;
+  mockLabel?: string;
 }
 
 const LETTERS = ["A", "B", "C", "D", "E", "F"];
 
-export function QuestionCard({ q, selected, revealed, onSelect }: QuestionCardProps) {
+export function QuestionCard({
+  q,
+  selected,
+  revealed,
+  onSelect,
+  unitLabel = "Week",
+  mockLabel = "Mock exam",
+}: QuestionCardProps) {
   return (
     <Card>
       <CardContent className="p-5 sm:p-6">
         <div className="mb-4 flex items-center gap-2">
-          <Badge variant="secondary">{q.week === 0 ? "Mock exam" : `Week ${q.week}`}</Badge>
+          <Badge variant="secondary">{q.week === 0 ? mockLabel : `${unitLabel} ${q.week}`}</Badge>
           <Badge variant="outline">{q.topic}</Badge>
         </div>
         <p className="mb-5 text-lg font-medium leading-snug">{q.question}</p>

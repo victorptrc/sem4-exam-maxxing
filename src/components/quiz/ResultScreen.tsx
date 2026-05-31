@@ -11,9 +11,20 @@ interface ResultScreenProps {
   answers: (number | null)[];
   best: { correct: number; total: number } | null;
   onRetry: () => void;
+  unitLabel?: string;
+  mockLabel?: string;
+  subjectId?: string;
 }
 
-export function ResultScreen({ questions, answers, best, onRetry }: ResultScreenProps) {
+export function ResultScreen({
+  questions,
+  answers,
+  best,
+  onRetry,
+  unitLabel = "Week",
+  mockLabel = "Mock",
+  subjectId,
+}: ResultScreenProps) {
   const correct = questions.reduce((n, q, i) => n + (answers[i] === q.answer ? 1 : 0), 0);
   const total = questions.length;
   const pct = total ? Math.round((correct / total) * 100) : 0;
@@ -49,7 +60,7 @@ export function ResultScreen({ questions, answers, best, onRetry }: ResultScreen
               <RotateCcw className="h-4 w-4" /> Try again
             </Button>
             <Button asChild variant="outline">
-              <Link to="/">
+              <Link to={subjectId ? `/subject/${subjectId}` : "/"}>
                 <Home className="h-4 w-4" /> Dashboard
               </Link>
             </Button>
@@ -65,7 +76,7 @@ export function ResultScreen({ questions, answers, best, onRetry }: ResultScreen
               <Card key={i}>
                 <CardContent className="p-4">
                   <div className="mb-2 flex items-center gap-2">
-                    <Badge variant="secondary">{q.week === 0 ? "Mock" : `Week ${q.week}`}</Badge>
+                    <Badge variant="secondary">{q.week === 0 ? mockLabel : `${unitLabel} ${q.week}`}</Badge>
                     <Badge variant="outline">{q.topic}</Badge>
                   </div>
                   <p className="mb-2 font-medium">{q.question}</p>

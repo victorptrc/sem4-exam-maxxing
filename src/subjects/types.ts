@@ -16,23 +16,42 @@ export interface Question {
   explanation: string;
 }
 
-/** Metadata describing one week's lesson. */
+/** Metadata describing one week/lecture. */
 export interface WeekMeta {
   week: number;
   title: string;
   /** One-line summary shown on the dashboard. */
   summary: string;
-  /** The lesson page component. */
-  component: ComponentType;
+  /** The lesson page component. Omitted for quiz-only subjects. */
+  component?: ComponentType;
 }
 
-/** A subject = a set of weeks (lessons) + a question bank. */
+/** One step of a per-subject study plan. */
+export interface StudyPlanStep {
+  day: string;
+  task: string;
+}
+
+/** A subject = a set of weeks/lectures + a question bank. */
 export interface Subject {
   id: string;
   title: string;
   description: string;
-  /** Accent hue used for theming/badges (Tailwind class fragment optional). */
+  /** Weeks/lectures. Each may carry a lesson `component`, or be quiz-only. */
   weeks: WeekMeta[];
-  /** All questions across all weeks, plus the mock set (week 0). */
+  /** All questions across all weeks, plus the mock/sample set (week 0). */
   questions: Question[];
+  /** Label for the unit of organization. Defaults to "Week". */
+  unitLabel?: string;
+  /** Label for the week-0 set. Defaults to "Mock exam". */
+  mockLabel?: string;
+  /** Human-readable exam date, e.g. "9 June 2026". */
+  examDate?: string;
+  /** Optional study plan shown on the dashboard. */
+  studyPlan?: StudyPlanStep[];
+}
+
+/** Does this subject have any lesson pages? */
+export function subjectHasLessons(subject: Subject): boolean {
+  return subject.weeks.some((w) => w.component);
 }
