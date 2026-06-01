@@ -40,6 +40,10 @@ It uses a hash router, so the built `dist/` also works when opened directly.
    all-weeks shuffle, and **Mock/Sample exam** for the official question set.
 3. Best scores are saved in your browser (localStorage). Aim for 80%+ on the
    mock + full exam.
+4. **Progress & statistics:** every answer is recorded per question, so the
+   subject dashboard shows your accuracy, coverage and "mastered" count, and the
+   **Statistics** page (`/stats/<subject>`) breaks it down by week/lecture and
+   lists your misses to review. Reset any time from that page.
 
 ### Quiz controls & feedback
 

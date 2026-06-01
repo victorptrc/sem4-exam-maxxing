@@ -19,6 +19,7 @@ import {
   getVolume,
   setVolume,
 } from "@/lib/storage";
+import { recordAnswer } from "@/lib/progress";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { QuestionCard, type PreparedQuestion } from "./QuestionCard";
@@ -119,6 +120,11 @@ export function QuizApp({
       return next;
     });
     const correct = picked === prepared[idx].answer;
+    recordAnswer(
+      subjectId,
+      { week: prepared[idx].week, question: prepared[idx].question },
+      correct
+    );
     if (correct) {
       setStreak((s) => {
         const ns = s + 1;

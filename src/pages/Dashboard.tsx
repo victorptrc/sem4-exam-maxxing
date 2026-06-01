@@ -9,9 +9,11 @@ import {
   GraduationCap,
   Shuffle,
 } from "lucide-react";
+import { BarChart3 } from "lucide-react";
 import { getSubject } from "@/subjects";
 import { subjectHasLessons } from "@/subjects/types";
 import { countByWeek } from "@/lib/questionBank";
+import { getStats } from "@/lib/progress";
 import { getVisitedWeeks, getBestScore } from "@/lib/storage";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -31,6 +33,8 @@ export function Dashboard() {
   const totalPractice = subject.questions.filter((q) => q.week > 0).length;
   const mockCount = subject.questions.filter((q) => q.week === 0).length;
   const mockBest = getBestScore(subject.id, "mock");
+  const stats = getStats(subject.id, subject.questions);
+  const pct = (x: number) => Math.round(x * 100);
 
   return (
     <div className="mx-auto max-w-5xl px-4 py-10">
@@ -82,6 +86,33 @@ export function Dashboard() {
           title={`Practice by ${unitLabel.toLowerCase()}`}
           desc="Focus on one topic"
         />
+      </section>
+
+      {/* Progress */}
+      <section className="mb-10">
+        <Link to={`/stats/${subject.id}`} className="group block">
+          <Card className="transition-all hover:border-primary hover:shadow-md">
+            <CardContent className="flex flex-wrap items-center gap-x-8 gap-y-4 p-5">
+              <div className="flex items-center gap-2 font-semibold">
+                <BarChart3 className="h-5 w-5 text-primary" /> Your progress
+              </div>
+              {stats.attempted === 0 ? (
+                <span className="text-sm text-muted-foreground">
+                  No answers recorded yet — take a quiz to start tracking.
+                </span>
+              ) : (
+                <div className="flex flex-wrap gap-x-8 gap-y-2">
+                  <Stat label="Accuracy" value={`${pct(stats.accuracy)}%`} />
+                  <Stat label="Covered" value={`${stats.attempted}/${stats.total}`} />
+                  <Stat label="Mastered" value={`${stats.mastered}`} />
+                </div>
+              )}
+              <span className="ml-auto text-sm font-medium text-primary group-hover:underline">
+                View statistics →
+              </span>
+            </CardContent>
+          </Card>
+        </Link>
       </section>
 
       {/* Weeks / lectures */}
@@ -164,6 +195,15 @@ export function Dashboard() {
       <footer className="mt-12 border-t pt-6 text-center text-sm text-muted-foreground">
         Built for exam prep · content derived from the course lecture material.
       </footer>
+    </div>
+  );
+}
+
+function Stat({ label, value }: { label: string; value: string }) {
+  return (
+    <div>
+      <p className="text-xl font-bold leading-none">{value}</p>
+      <p className="mt-1 text-xs text-muted-foreground">{label}</p>
     </div>
   );
 }

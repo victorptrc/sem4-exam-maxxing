@@ -3,6 +3,7 @@ import { Home } from "./pages/Home";
 import { Dashboard } from "./pages/Dashboard";
 import { LessonPage } from "./pages/LessonPage";
 import { QuizPage } from "./pages/QuizPage";
+import { Stats } from "./pages/Stats";
 import { NotFound } from "./pages/NotFound";
 
 export default function App() {
@@ -13,6 +14,7 @@ export default function App() {
         <Route path="/subject/:subjectId" element={<Dashboard />} />
         <Route path="/lesson/:subjectId/:week" element={<LessonPage />} />
         <Route path="/quiz/:subjectId" element={<QuizPage />} />
+        <Route path="/stats/:subjectId" element={<Stats />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </div>
