@@ -92,6 +92,20 @@
   transform: rotateY(180deg);
 }
 
+/* Streak flame — gentle idle sway for the drawn (SVG) flame */
+.flame-idle {
+  transform-origin: 50% 90%;
+  animation: flame-sway 2.4s ease-in-out infinite;
+  will-change: transform;
+}
+@keyframes flame-sway {
+  0%, 100% { transform: rotate(-1.5deg) scale(1); }
+  50% { transform: rotate(1.5deg) scale(1.04); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .flame-idle { animation: none; }
+}
+
 /* Lesson prose helpers */
 .lesson-prose p {
   margin-bottom: 0.75rem;

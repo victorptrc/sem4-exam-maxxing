@@ -42,6 +42,43 @@ export function saveBestScore(
   }
 }
 
+/** Whether quiz sound effects are enabled (default true). */
+export function isSoundEnabled(): boolean {
+  try {
+    return localStorage.getItem(`${PREFIX}:sound`) !== "off";
+  } catch {
+    return true;
+  }
+}
+
+export function setSoundEnabled(on: boolean): void {
+  try {
+    localStorage.setItem(`${PREFIX}:sound`, on ? "on" : "off");
+  } catch {
+    /* ignore */
+  }
+}
+
+/** Sound effect volume, 0..1 (default 0.5). */
+export function getVolume(): number {
+  try {
+    const raw = localStorage.getItem(`${PREFIX}:volume`);
+    if (raw === null) return 0.5;
+    const v = Number(raw);
+    return Number.isFinite(v) ? Math.min(1, Math.max(0, v)) : 0.5;
+  } catch {
+    return 0.5;
+  }
+}
+
+export function setVolume(v: number): void {
+  try {
+    localStorage.setItem(`${PREFIX}:volume`, String(Math.min(1, Math.max(0, v))));
+  } catch {
+    /* ignore */
+  }
+}
+
 /** Mark a lesson week as visited (for dashboard progress). */
 export function markWeekVisited(subjectId: string, week: number): void {
   try {

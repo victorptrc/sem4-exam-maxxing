@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { RotateCcw, Home, Trophy, Check, X } from "lucide-react";
+import { RotateCcw, Home, Trophy, Check, X, Flame } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -14,6 +14,7 @@ interface ResultScreenProps {
   unitLabel?: string;
   mockLabel?: string;
   subjectId?: string;
+  bestStreak?: number;
 }
 
 export function ResultScreen({
@@ -24,6 +25,7 @@ export function ResultScreen({
   unitLabel = "Week",
   mockLabel = "Mock",
   subjectId,
+  bestStreak,
 }: ResultScreenProps) {
   const correct = questions.reduce((n, q, i) => n + (answers[i] === q.answer ? 1 : 0), 0);
   const total = questions.length;
@@ -53,6 +55,11 @@ export function ResultScreen({
           {best && (
             <p className="mt-2 text-sm text-muted-foreground">
               Best: {best.correct}/{best.total} ({Math.round((best.correct / best.total) * 100)}%)
+            </p>
+          )}
+          {bestStreak !== undefined && bestStreak > 1 && (
+            <p className="mt-1 inline-flex items-center gap-1 text-sm font-medium text-orange-600 dark:text-orange-400">
+              <Flame className="h-4 w-4" /> Best streak: {bestStreak}
             </p>
           )}
           <div className="mt-6 flex justify-center gap-3">

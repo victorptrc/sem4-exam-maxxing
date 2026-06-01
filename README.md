@@ -41,6 +41,18 @@ It uses a hash router, so the built `dist/` also works when opened directly.
 3. Best scores are saved in your browser (localStorage). Aim for 80%+ on the
    mock + full exam.
 
+### Quiz controls & feedback
+
+- **Keyboard:** `←` / `→` move between questions, `↑` / `↓` (or `1`–`4` / `A`–`D`)
+  pick an option, `Enter` checks then continues, `S` skips.
+- **Streak & fire:** consecutive correct answers build a streak; once you're on a
+  roll a warm CSS flame burns to the right of the card and grows with the streak.
+  Your best streak shows on the results screen.
+- **Sounds:** a chime on correct, a buzz on wrong, and a flourish on every 5th in a
+  row (via `use-sound`). Toggle the speaker icon to mute (the choice is remembered).
+  The three sound effects are short generated WAVs in `src/assets/sounds/` — public
+  domain, no attribution needed.
+
 ## Project structure
 
 ```

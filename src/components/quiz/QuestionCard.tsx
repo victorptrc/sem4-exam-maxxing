@@ -48,9 +48,14 @@ export function QuestionCard({
                 key={i}
                 type="button"
                 disabled={revealed}
-                onClick={() => onSelect(i)}
+                onClick={(e) => {
+                  onSelect(i);
+                  // Drop the lingering mouse-focus ring so keyboard ↑/↓ navigation
+                  // doesn't leave a border on the previously clicked option.
+                  e.currentTarget.blur();
+                }}
                 className={cn(
-                  "flex items-start gap-3 rounded-lg border px-4 py-3 text-left text-sm transition-colors",
+                  "flex items-start gap-3 rounded-lg border px-4 py-3 text-left text-sm transition-colors outline-none focus-visible:ring-2 focus-visible:ring-primary/50",
                   !revealed && isPicked && "border-primary bg-primary/5",
                   !revealed && !isPicked && "hover:border-primary/60 hover:bg-muted/50",
                   revealed && isCorrect && "border-success bg-success/10",
