@@ -1,5 +1,8 @@
 import type { ComponentType } from "react";
 
+/** Where a question came from. Omitted for regular lecture questions. */
+export type QuestionSource = "sample-exam" | "exercise-based";
+
 /** A single multiple-choice question. */
 export interface Question {
   /** Week number this question belongs to (use 0 for the mock exam set). */
@@ -14,6 +17,8 @@ export interface Question {
   answer: 0 | 1 | 2 | 3;
   /** Teaching explanation: why the right answer is right (and traps wrong). */
   explanation: string;
+  /** Origin label. Omitted for regular lecture questions. */
+  source?: QuestionSource;
 }
 
 /** Metadata describing one week/lecture. */

@@ -82,9 +82,10 @@ export function ResultScreen({
             {wrong.map(({ q, i }) => (
               <Card key={i}>
                 <CardContent className="p-4">
-                  <div className="mb-2 flex items-center gap-2">
+                  <div className="mb-2 flex flex-wrap items-center gap-2">
                     <Badge variant="secondary">{q.week === 0 ? mockLabel : `${unitLabel} ${q.week}`}</Badge>
                     <Badge variant="outline">{q.topic}</Badge>
+                    {q.source === "exercise-based" && <Badge variant="accent">Exercise-based</Badge>}
                   </div>
                   <p className="mb-2 font-medium">{q.question}</p>
                   <p className="mb-1 flex items-start gap-2 text-sm">

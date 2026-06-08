@@ -1,8 +1,9 @@
 import * as React from "react";
 import { Link, useParams, useSearchParams } from "react-router-dom";
-import { ArrowLeft, ClipboardList, Layers, Shuffle } from "lucide-react";
+import { ArrowLeft, ClipboardList, GraduationCap, Layers, Shuffle } from "lucide-react";
+import type { Question } from "@/subjects/types";
 import { getSubject } from "@/subjects";
-import { questionsForWeek, weeksInBank } from "@/lib/questionBank";
+import { questionsForWeek, sampleExam, weeksInBank } from "@/lib/questionBank";
 import { getBestScore } from "@/lib/storage";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent } from "@/components/ui/card";
@@ -24,6 +25,8 @@ export function QuizPage() {
   const [tab, setTab] = React.useState(
     initialWeek
       ? "practice"
+      : initialMode === "exam"
+      ? "exam"
       : initialMode === "mock" && hasMock
       ? "mock"
       : initialMode === "full"
@@ -33,6 +36,9 @@ export function QuizPage() {
   const [selectedWeek, setSelectedWeek] = React.useState<number | null>(
     initialWeek ? Number(initialWeek) : null
   );
+
+  // Stable sampler so the quiz doesn't re-roll on every render — only on retry.
+  const examSampler = React.useCallback((qs: Question[]) => sampleExam(qs, 30), []);
 
   if (!subject) return <NotFound />;
 
@@ -58,9 +64,12 @@ export function QuizPage() {
       <p className="mb-6 text-muted-foreground">{subject.title}</p>
 
       <Tabs value={tab} onValueChange={setTab}>
-        <TabsList className={`grid w-full ${hasMock ? "grid-cols-3" : "grid-cols-2"}`}>
+        <TabsList className={`grid w-full ${hasMock ? "grid-cols-4" : "grid-cols-3"}`}>
           <TabsTrigger value="practice">
             <Layers className="mr-1.5 h-4 w-4" /> By {unitLabel.toLowerCase()}
+          </TabsTrigger>
+          <TabsTrigger value="exam">
+            <GraduationCap className="mr-1.5 h-4 w-4" /> Exam
           </TabsTrigger>
           <TabsTrigger value="full">
             <Shuffle className="mr-1.5 h-4 w-4" /> Full exam
@@ -101,6 +110,23 @@ export function QuizPage() {
               />
             </div>
           )}
+        </TabsContent>
+
+        {/* Random exam — fresh sample every attempt */}
+        <TabsContent value="exam">
+          <p className="mb-4 text-sm text-muted-foreground">
+            30 random questions across all {unitLabel.toLowerCase()}s (~10% exercise-based),
+            reshuffled into a new exam every time you press <em>Try again</em>.
+          </p>
+          <QuizApp
+            key="exam"
+            subjectId={subjectId}
+            modeKey="exam"
+            questions={subject.questions}
+            sample={examSampler}
+            unitLabel={unitLabel}
+            mockLabel={mockLabel}
+          />
         </TabsContent>
 
         {/* Full exam */}

@@ -140,7 +140,7 @@ const questions: Question[] = [
       "General Remote Procedure Call, developed by Microsoft",
       "Google Remote Procedure Call, developed by Google",
       "Generic RPC Protocol, developed by the IETF",
-      "gRPC Remote Procedure Call, developed by Netflix",
+      "Generic Remote Procedure Call, developed by Netflix",
     ],
     answer: 1,
     explanation:

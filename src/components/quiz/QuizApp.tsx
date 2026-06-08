@@ -34,14 +34,21 @@ interface QuizAppProps {
   questions: Question[];
   /** Shuffle question order (off for the fixed mock exam). */
   shuffleQuestions?: boolean;
+  /** Optional sampler: pick/limit which questions to use (e.g. a random exam). */
+  sample?: (questions: Question[]) => Question[];
   /** Label for the unit of organization, e.g. "Week" or "Lecture". */
   unitLabel?: string;
   /** Label for the week-0 set, e.g. "Mock exam" or "Sample exam". */
   mockLabel?: string;
 }
 
-function prepare(questions: Question[], shuffleQuestions: boolean): PreparedQuestion[] {
-  const ordered = shuffleQuestions ? shuffle(questions) : questions;
+function prepare(
+  questions: Question[],
+  shuffleQuestions: boolean,
+  sample?: (questions: Question[]) => Question[]
+): PreparedQuestion[] {
+  const base = sample ? sample(questions) : questions;
+  const ordered = shuffleQuestions ? shuffle(base) : base;
   return ordered.map((q) => {
     const opts = q.options.map((text, idx) => ({ text, correct: idx === q.answer }));
     const shuffled = shuffle(opts);
@@ -52,6 +59,7 @@ function prepare(questions: Question[], shuffleQuestions: boolean): PreparedQues
       options: shuffled.map((o) => o.text),
       answer: shuffled.findIndex((o) => o.correct),
       explanation: q.explanation,
+      source: q.source,
     };
   });
 }
@@ -61,21 +69,22 @@ export function QuizApp({
   modeKey,
   questions,
   shuffleQuestions = true,
+  sample,
   unitLabel,
   mockLabel,
 }: QuizAppProps) {
   const [seed, setSeed] = React.useState(0);
   const prepared = React.useMemo(
-    () => prepare(questions, shuffleQuestions),
+    () => prepare(questions, shuffleQuestions, sample),
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [questions, shuffleQuestions, seed]
+    [questions, shuffleQuestions, sample, seed]
   );
 
   const [idx, setIdx] = React.useState(0);
   const [answers, setAnswers] = React.useState<(number | null)[]>(() =>
-    questions.map(() => null)
+    prepared.map(() => null)
   );
-  const [revealed, setRevealed] = React.useState<boolean[]>(() => questions.map(() => false));
+  const [revealed, setRevealed] = React.useState<boolean[]>(() => prepared.map(() => false));
   const [finished, setFinished] = React.useState(false);
   const [streak, setStreak] = React.useState(0);
   const [bestStreak, setBestStreak] = React.useState(0);

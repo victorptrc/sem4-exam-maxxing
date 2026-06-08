@@ -85,4 +85,16 @@ export const WEEK_INFO: WeekInfo[] = [
     summary:
       "The test pyramid, integration/system testing, and performance testing: load vs stress testing.",
   },
+  {
+    week: 98,
+    title: "Concept Notes — Quick Explainers",
+    summary:
+      "Growing collection of answers to your study-session questions (SOA, ESB, coarse vs fine grained, SOA vs SOAP, Protobuf & gRPC, …) with diagrams and flashcards.",
+  },
+  {
+    week: 99,
+    title: "Hard Exam Simulation",
+    summary:
+      "Exam-level-plus difficulty — the teacher said the real exam is harder than the mock. Take this last, after the weekly quizzes and the mock.",
+  },
 ];

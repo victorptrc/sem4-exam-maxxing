@@ -33,6 +33,7 @@ export function Dashboard() {
   const totalPractice = subject.questions.filter((q) => q.week > 0).length;
   const mockCount = subject.questions.filter((q) => q.week === 0).length;
   const mockBest = getBestScore(subject.id, "mock");
+  const examBest = getBestScore(subject.id, "exam");
   const stats = getStats(subject.id, subject.questions);
   const pct = (x: number) => Math.round(x * 100);
 
@@ -59,7 +60,7 @@ export function Dashboard() {
       </header>
 
       {/* Quiz CTAs */}
-      <section className="mb-10 grid gap-4 sm:grid-cols-3">
+      <section className="mb-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         {mockCount > 0 && (
           <QuizCta
             to={`/quiz/${subject.id}?mode=mock`}
@@ -74,6 +75,17 @@ export function Dashboard() {
             highlight
           />
         )}
+        <QuizCta
+          to={`/quiz/${subject.id}?mode=exam`}
+          icon={GraduationCap}
+          title="Exam mode"
+          desc="30 random questions, fresh every time"
+          footer={
+            examBest
+              ? `Best: ${Math.round((examBest.correct / examBest.total) * 100)}%`
+              : "Not attempted"
+          }
+        />
         <QuizCta
           to={`/quiz/${subject.id}?mode=full`}
           icon={Shuffle}
@@ -150,8 +162,10 @@ export function Dashboard() {
                 </CardContent>
               </Card>
             );
-            // Lessons link to the lesson page; quiz-only units link to that unit's practice set.
-            return hasLessons ? (
+            // Weeks with a lesson link to the lesson page; quiz-only weeks
+            // (e.g. an exam-simulation set inside a lesson subject) link to
+            // that week's practice set.
+            return w.component ? (
               <Link key={w.week} to={`/lesson/${subject.id}/${w.week}`}>
                 {card}
               </Link>

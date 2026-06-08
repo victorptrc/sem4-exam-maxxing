@@ -85,13 +85,13 @@ const questions: Question[] = [
       "Compared with REST, SOAP is typically described as:",
     options: [
       "Stateless, lightweight, and JSON-only",
-      "Stateful, XML-based, stricter, and slower due to XML parsing overhead",
+      "Supporting stateful operations, XML-based, stricter, and slower due to XML parsing overhead",
       "Faster because it uses binary encoding instead of text",
       "Incapable of supporting security features like digital signatures",
     ],
     answer: 1,
     explanation:
-      "SOAP is typically stateful, uses strict XML formatting, is defined by W3C standards, and is slower than REST because of XML parsing overhead. REST is generally simpler, stateless, and faster especially with JSON.",
+      "SOAP supports stateful operations (via WS-* extensions), uses strict XML formatting, is defined by W3C standards, and is slower than REST because of XML parsing overhead. REST is generally simpler, stateless, and faster especially with JSON.",
   },
   {
     week: 13,
@@ -324,7 +324,7 @@ const questions: Question[] = [
     week: 13,
     topic: "MOM reliability",
     question:
-      "Which MOM characteristic ensures that messages are not lost by supporting retries, acknowledgments, and dead letter queues?",
+      "Which MOM characteristic ensures that messages are not lost across consumer failures, by supporting retries, acknowledgments, and dead letter queues?",
     options: [
       "Durability",
       "Scalability",

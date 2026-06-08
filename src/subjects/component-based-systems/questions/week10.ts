@@ -344,7 +344,7 @@ const questions: Question[] = [
     ],
     answer: 2,
     explanation:
-      "ASP.NET Core supports Transient (new instance per request), Scoped (one per HTTP request), and Singleton (one for the app lifetime). 'Prototype' is the equivalent scope name in Spring.",
+      "ASP.NET Core supports Transient (new instance every time the service is resolved), Scoped (one per HTTP request), and Singleton (one for the app lifetime). 'Prototype' is the equivalent scope name in Spring.",
   },
   {
     week: 10,

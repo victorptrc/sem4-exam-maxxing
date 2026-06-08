@@ -13,6 +13,7 @@ const sample: Question[] = [
     ],
     answer: 1,
     explanation: "A crossword puzzle doesn't change while you think — it's static. It's also deterministic, discrete, fully observable, and sequential.",
+    source: "sample-exam",
   },
   {
     week: 0,
@@ -26,6 +27,7 @@ const sample: Question[] = [
     ],
     answer: 0,
     explanation: "UCS finds the cheapest path. Costs: S-A-D-G = 1+1+2 = 4 (winner); S-B-G = 2+5 = 7; S-A-C-G = 1+1+5 = 7; S-B-D-G = 2+2+2 = 6.",
+    source: "sample-exam",
   },
   {
     week: 0,
@@ -39,6 +41,7 @@ const sample: Question[] = [
     ],
     answer: 0,
     explanation: "IDS performs DFS with depth limit 0, then 1, then 2, etc., until the goal is found. Combines DFS's low memory with BFS's completeness/optimality (for uniform step cost).",
+    source: "sample-exam",
   },
   {
     week: 0,
@@ -52,6 +55,7 @@ const sample: Question[] = [
     ],
     answer: 3,
     explanation: "GA performance depends on starting population, population size, and the selection/crossover/mutation operators — all three together drive how fast (and whether) it converges.",
+    source: "sample-exam",
   },
   {
     week: 0,
@@ -65,6 +69,7 @@ const sample: Question[] = [
     ],
     answer: 2,
     explanation: "Local search only cares about the final state quality (e.g. n-queens, scheduling). It ignores path history, unlike BFS/DFS/A* which build and return full paths.",
+    source: "sample-exam",
   },
   {
     week: 0,
@@ -78,6 +83,7 @@ const sample: Question[] = [
     ],
     answer: 2,
     explanation: "For each x in X, need some y in {2,4,6} with x<y AND x+y>8. x=3: y=6 works (3<6, 9>8) ✓. x=4: y=6 (4<6, 10>8) ✓. x=5: y=6 (5<6, 11>8) ✓. x=1,2: no y satisfies x+y>8. x=6: no y>6.",
+    source: "sample-exam",
   },
   {
     week: 0,
@@ -91,6 +97,7 @@ const sample: Question[] = [
     ],
     answer: 2,
     explanation: "Sum over M: P(V=F|L=F) = P(V=F|L=F,M=T)·P(M=T) + P(V=F|L=F,M=F)·P(M=F) = 0.7·0.2 + 0.95·0.8 = 0.14 + 0.76 = 0.90.",
+    source: "sample-exam",
   },
 ];
 

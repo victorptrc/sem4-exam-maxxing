@@ -7,6 +7,7 @@ import {
 } from "./meta";
 
 import sample from "./questions/sample";
+import exercises from "./questions/exercises";
 import l01 from "./questions/lecture01";
 import l02 from "./questions/lecture02";
 import l03 from "./questions/lecture03";
@@ -30,6 +31,7 @@ const weeks: WeekMeta[] = LECTURE_INFO.map((l) => ({
 
 const questions: Question[] = [
   sample,
+  exercises,
   l01,
   l02,
   l03,

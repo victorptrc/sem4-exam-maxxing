@@ -1,6 +1,7 @@
 import { Check, X } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import type { QuestionSource } from "@/subjects/types";
 import { cn } from "@/lib/utils";
 
 export interface PreparedQuestion {
@@ -10,6 +11,7 @@ export interface PreparedQuestion {
   options: string[];
   answer: number; // index into shuffled options
   explanation: string;
+  source?: QuestionSource;
 }
 
 interface QuestionCardProps {
@@ -34,9 +36,10 @@ export function QuestionCard({
   return (
     <Card>
       <CardContent className="p-5 sm:p-6">
-        <div className="mb-4 flex items-center gap-2">
+        <div className="mb-4 flex flex-wrap items-center gap-2">
           <Badge variant="secondary">{q.week === 0 ? mockLabel : `${unitLabel} ${q.week}`}</Badge>
           <Badge variant="outline">{q.topic}</Badge>
+          {q.source === "exercise-based" && <Badge variant="accent">Exercise-based</Badge>}
         </div>
         <p className="mb-5 text-lg font-medium leading-snug">{q.question}</p>
         <div className="grid gap-2.5">
